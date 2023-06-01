@@ -11,15 +11,28 @@ import '../models/user_models.dart';
 import '../widgets/bottom_container.dart';
 import '../widgets/text_editing_widget.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
   SignUpScreen({super.key});
 
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+
+  //text controllers
   final _emailController = TextEditingController();
+
   final _nameController = TextEditingController();
+
   final _phoneNumberController = TextEditingController();
+
   final _passwordController = TextEditingController();
 
   final AuthController _authController = AuthController();
+
+  bool  loading = false;
+
 
   Future siginUp(BuildContext context) async {
 
@@ -46,7 +59,16 @@ class SignUpScreen extends StatelessWidget {
           emailId: _emailController.text,
           deviceType: Helper.getPlatformName());
 
+
+      setState(() {
+        loading = true;
+      });
+
       await _authController.signUp(user, context);
+
+      setState(() {
+        loading = false;
+      });
       
     }
   }
@@ -192,7 +214,11 @@ class SignUpScreen extends StatelessWidget {
                         const SizedBox(
                           height: 16,
                         ),
-                        PrimaryButton(
+                        loading
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : PrimaryButton(
                           onPress: ()  {
                             siginUp(context);
                            
