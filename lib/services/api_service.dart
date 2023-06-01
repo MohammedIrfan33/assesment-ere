@@ -11,7 +11,7 @@ class ApiService{
   //signup
    Future<void> siginUpUser(User user) async {
     
-    final Uri uri = Uri.https(ApiConstants.baseUrl, '/api/register');
+    final Uri uri = Uri.parse('${ApiConstants.baseUrl}/api/register');
     
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -34,7 +34,9 @@ class ApiService{
 
   //signin
   Future<User> sigInUser(User user) async {
-    final Uri uri = Uri.https(ApiConstants.baseUrl, '/api/login');
+
+    
+     final Uri uri = Uri.parse('${ApiConstants.baseUrl}/api/login');
     
     final Map<String, String> headers = {
       'Content-Type': 'application/json',

@@ -1,4 +1,4 @@
 class ApiConstants{
 
-  static const String baseUrl = 'caapi.erebs.in';
+  static const String baseUrl = 'https://caapi.erebs.in/';
 }

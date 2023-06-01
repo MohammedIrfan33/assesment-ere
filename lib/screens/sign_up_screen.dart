@@ -1,7 +1,8 @@
-import 'package:country_code_picker/country_code_picker.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ui/constants/appcolors.dart';
+import 'package:ui/screens/sign_in_screen.dart';
 
 import 'package:ui/widgets/primary_button.dart';
 
@@ -12,7 +13,7 @@ import '../widgets/bottom_container.dart';
 import '../widgets/text_editing_widget.dart';
 
 class SignUpScreen extends StatefulWidget {
-  SignUpScreen({super.key});
+ const  SignUpScreen({super.key});
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -36,10 +37,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Future siginUp(BuildContext context) async {
 
-    if(_passwordController.text.length <6){
-       ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('password minimum 6 charctor')));
-    }
+   
     if (_nameController.text == '') {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Name Required')));
@@ -55,7 +53,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     } else {
       final user = User(
           fullName: _nameController.text,
-          phoneNumber: '91${_phoneNumberController.text}',
+          phoneNumber: _phoneNumberController.text.replaceAll('+',''),
           emailId: _emailController.text,
           deviceType: Helper.getPlatformName());
 
@@ -71,6 +69,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
       });
       
     }
+  }
+
+  @override
+  void dispose() {
+
+    _emailController.dispose();
+    _nameController.dispose();
+    _passwordController.dispose();
+    _phoneNumberController.dispose();
+    
+    // TODO: implement dispose
+    super.dispose();
+
+    
   }
 
   @override
@@ -181,30 +193,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         const SizedBox(
                           height: 16,
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: const Color(0xffF1F1F1),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'Enter Your  Phone Number',
-                              prefixIcon: Row(
-                                children: const [
-                                  CountryCodePicker(
-                                    showFlag: false,
-                                  ),
-                                  Icon(
-                                    Icons.arrow_drop_down,
-                                    color: Colors.black,
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-
-                        ),
+                        PhoneField(phoneNumberController: _phoneNumberController),
                         const SizedBox(height: 20,),
                          TextFieldWidgets(
                           controller: _passwordController,

@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:ui/constants/appcolors.dart';
 import 'package:ui/controller/auth_controller.dart';
 import 'package:ui/models/user_models.dart';
@@ -27,8 +28,8 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   void dispose() {
     _passwordController.dispose();
-    _passwordController.dispose();
-    
+    _phoneNumberController.dispose();
+
     super.dispose();
   }
 
@@ -43,7 +44,7 @@ class _SignInScreenState extends State<SignInScreen> {
           .showSnackBar(const SnackBar(content: Text('Password Is Required')));
     } else {
       final user = User(
-          phoneNumber: '91${_phoneNumberController.text}',
+          phoneNumber: _phoneNumberController.text.replaceAll('+',''),
           password: _passwordController.text);
 
       setState(() {
@@ -130,10 +131,8 @@ class _SignInScreenState extends State<SignInScreen> {
                         const SizedBox(
                           height: 16,
                         ),
-                        TextFieldWidgets(
-                          controller: _phoneNumberController,
-                          hintText: 'Enter your phone number',
-                        ),
+                        
+                        PhoneField(phoneNumberController: _phoneNumberController),
                         const SizedBox(
                           height: 16,
                         ),
@@ -203,5 +202,42 @@ class _SignInScreenState extends State<SignInScreen> {
                 )
               ],
             )));
+  }
+}
+
+class PhoneField extends StatelessWidget {
+  const PhoneField({
+    Key? key,
+    required TextEditingController phoneNumberController,
+  }) : _phoneNumberController = phoneNumberController, super(key: key);
+
+  final TextEditingController _phoneNumberController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: const EdgeInsets.only(left: 10),
+        decoration: BoxDecoration(
+          color: const Color(0xffF1F1F1),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child:
+            //phone field
+            IntlPhoneField(
+          controller: _phoneNumberController,
+          dropdownIconPosition: IconPosition.trailing,
+          showCountryFlag: false,
+          
+          decoration: const InputDecoration(
+            counterText: '',
+            hintText: 'Phone Number',
+            hintStyle:  TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: Color(0xffC6C6C6)),
+            border: InputBorder.none,
+          ),
+          initialCountryCode: 'IN',
+        ));
   }
 }
